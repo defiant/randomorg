@@ -1,0 +1,21 @@
+{
+  "name": "defiant/randomorg",
+  "description": "PHP class for Random.org",
+  "keywords": ["random", "random.org"],
+  "homepage": "http://github.com/defiant/random.org",
+  "authors": [
+    {
+      "name": "Sinan Taga",
+      "email": "sinantaga@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "RandomOrg\\": "src/randomorg"
+    }
+  }
+}
