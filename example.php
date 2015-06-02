@@ -2,10 +2,16 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$url = 'https://api.random.org/json-rpc/1/invoke';
+$random = new \RandomOrg\Random();
 
-$client = new \RandomOrg\Client($url);
+// Simple method
+// following functions returns 52 random non-repeating numbers between 1-52
+$result = $random->generateIntegers(52, 1, 52, false);
 
-$random = new \RandomOrg\Random($client);
+// Signed methods
+// following functions returns the above with signed data
+$result = $random->generateIntegers(52, 1, 52, false, 10, true);
 
-var_dump($random->generateIntegers(100, 1, 200));
+// Verify Signature
+$random->verifySignature($result['result']['random'], $result['result']['signature']);
+

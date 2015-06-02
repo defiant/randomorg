@@ -20,14 +20,35 @@ class Random implements RandomInterface{
     /**
      * @var string
      */
-    protected $apiKey = '426c43ad-63de-4e3d-bfe3-bc89c1ac9005';
+    protected $apiKey = '00000000-0000-0000-0000-000000000000';
+
+    /* Simple Methods */
+    const INTEGERS = 'generateIntegers';
+    const DECIMAL_FRACTIONS = 'generateDecimalFractions';
+    const GAUSSIANS = 'generateGaussians';
+    const STRINGS = 'generateStrings';
+    const UUIDS = 'generateUUIDs';
+    const BLOBS = 'generateBlobs';
+
+    /* Signed Methods */
+    const SIGNED_INTEGERS = 'generateSignedIntegers';
+    const SIGNED_DECIMAL_FRACTIONS = 'generateSignedDecimalFractions';
+    const SIGNED_GAUSSIANS = 'generateSignedGaussians';
+    const SIGNED_STRINGS = 'generateSignedStrings';
+    const SIGNED_UUIDS = 'generateSignedUUIDs';
+    const SIGNED_BLOBS = 'generateSignedBlobs';
 
     /**
      * @param ClientInterface $client
      */
-    public function __construct(ClientInterface $client)
+    public function __construct(ClientInterface $client = null)
     {
-        $this->client = new Client($this->url, ['apiKey' => $this->apiKey]);
+        if(!$client){
+            $this->client = new Client($this->url);
+        }else{
+            $this->client = $client;
+        }
+
     }
 
     /**
@@ -36,11 +57,12 @@ class Random implements RandomInterface{
      * @param $max
      * @param bool $replacement
      * @param int $base
+     * @param bool $signed
      * @return mixed
      * @throws RuntimeException
      * @throws \Exception
      */
-    public function generateIntegers($n, $min, $max, $replacement = true, $base = 10)
+    public function generateIntegers($n, $min, $max, $replacement = true, $base = 10, $signed = false)
     {
         $params = [
             'n' => $n,
@@ -50,17 +72,20 @@ class Random implements RandomInterface{
             'base' => $base,
         ];
 
-        return $this->query('generateIntegers', $params);
+        $method = $signed ? self::SIGNED_INTEGERS : self::INTEGERS;
+
+        return $this->query($method, $params);
     }
 
     /**
      * @param $n
      * @param int $decimalPlaces
-     * @param $replacement
+     * @param bool $replacement
+     * @param bool $signed
      * @return mixed
      * @throws \Exception
      */
-    public function generateDecimalFractions($n, $decimalPlaces = 2, $replacement)
+    public function generateDecimalFractions($n, $decimalPlaces = 2, $replacement = true, $signed = false)
     {
         if($decimalPlaces > 20 || $decimalPlaces < 1){
             $decimalPlaces = 2;
@@ -72,7 +97,9 @@ class Random implements RandomInterface{
             'replacement' => $replacement
         ];
 
-        return $this->query('generateDecimalFractions', $params);
+        $method = $signed ? self::SIGNED_DECIMAL_FRACTIONS : self::DECIMAL_FRACTIONS;
+
+        return $this->query($method, $params);
     }
 
     /**
@@ -80,10 +107,11 @@ class Random implements RandomInterface{
      * @param $mean
      * @param $standardDeviation
      * @param int $significantDigits
+     * @param bool $signed
      * @return mixed
      * @throws \Exception
      */
-    public function generateGaussians($n, $mean, $standardDeviation, $significantDigits = 2) {
+    public function generateGaussians($n, $mean, $standardDeviation, $significantDigits = 2, $signed = false) {
 
         if($significantDigits > 20 || $significantDigits < 1) {
             $significantDigits = 2;
@@ -96,7 +124,9 @@ class Random implements RandomInterface{
             'significantDigits' => $significantDigits
         ];
 
-        return $this->query('generateGaussians', $params);
+        $method = $signed ? self::SIGNED_GAUSSIANS : self::GAUSSIANS;
+
+        return $this->query($method, $params);
     }
 
     /**
@@ -104,10 +134,11 @@ class Random implements RandomInterface{
      * @param $length
      * @param string $chars
      * @param bool $replacement
+     * @param bool signed
      * @return mixed
      * @throws \Exception
      */
-    public function generateStrings($n, $length, $chars = '', $replacement = true)
+    public function generateStrings($n, $length, $chars = '', $replacement = true, $signed = false)
     {
         if(!$chars){
             $chars = 'abcdefghijklmnopqrstuvwxyz';
@@ -120,19 +151,24 @@ class Random implements RandomInterface{
             'replacement' => $replacement
         ];
 
-        return $this->query('generateStrings', $params);
+        $method = $signed ? self::SIGNED_STRINGS : self::STRINGS;
+
+        return $this->query($method, $params);
     }
 
     /**
-     * @param $n
+     * @param int $n
+     * @param bool $signed
      * @return mixed
      * @throws \Exception
      */
-    public function generateUUIDs($n)
+    public function generateUUIDs($n, $signed = false)
     {
         $params = ['n' => $n];
 
-        return $this->query('generateUUIDs', $params);
+        $method = $signed ? self::SIGNED_UUIDS : self::UUIDS;
+
+        return $this->query($method, $params);
 
     }
 
@@ -140,10 +176,11 @@ class Random implements RandomInterface{
      * @param $n
      * @param $size
      * @param string $format
+     * @param bool $signed
      * @return mixed
      * @throws \Exception
      */
-    public function generateBlobs($n, $size, $format = 'base64')
+    public function generateBlobs($n, $size, $format = 'base64', $signed = false)
     {
         $acceptedValues = ['base64', 'hex'];
 
@@ -157,7 +194,9 @@ class Random implements RandomInterface{
             'format' => $format
         ];
 
-        return $this->query('generateBlobs', $params);
+        $method = $signed ? self::SIGNED_BLOBS : self::BLOBS;
+
+        return $this->query($method, $params);
     }
 
     /**
@@ -169,20 +208,45 @@ class Random implements RandomInterface{
         return $this->query('getUsage');
     }
 
+
+    /**
+     * @param array $random
+     * @param $signature
+     * @return bool
+     * @throws \Exception
+     */
+    public function verifySignature(array $random, $signature)
+    {
+        $params = [
+          'random' => $random,
+          'signature' => $signature
+        ];
+
+         $result = $this->query('verifySignature', $params);
+
+        return (bool) $result['result']['authenticity'];
+    }
+
+
     /**
      * @param $method
      * @param array $params
      * @return mixed
-     * @throws RuntimeException
-     * @throws \Exception
+     * @throws RandomOrgException
      */
     protected function query($method, $params = [])
     {
+        // All other methods require an API key except verifySignature
+        // this method seems to work without it
+        if($method != 'verifySignature') {
+            $params = array_merge($params, ['apiKey' => $this->apiKey]);
+        }
+
         $req = $this->client->prepareRequest($method, $params);
         $res = $this->client->makeRequest($req);
 
         if(isset($res['error'])){
-            throw new \Exception('Random.org exception (' . $res['error']['code'] . '): ' . $res['error']['message']);
+            throw new RandomOrgException('Random.org exception (' . $res['error']['code'] . '): ' . $res['error']['message']);
         }
 
         return $res;

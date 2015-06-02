@@ -6,11 +6,15 @@ namespace randomorg;
 
 interface RandomInterface {
 
-    public function generateIntegers($n, $min, $max, $replacement, $base);
-    public function generateDecimalFractions($n, $decimal, $replacement);
-    public function generateGaussians($n, $mean, $standardDeviation, $significantDigits);
-    public function generateStrings($n, $length, $chars, $replacement);
-    public function generateUUIDs($n);
-    public function generateBlobs($n, $size, $format = 'base64');
+    /*
+     * Simple Methods
+     * */
+    public function generateIntegers($n, $min, $max, $replacement, $base, $signed);
+    public function generateDecimalFractions($n, $decimal, $replacement, $signed);
+    public function generateGaussians($n, $mean, $standardDeviation, $significantDigits, $signed);
+    public function generateStrings($n, $length, $chars, $replacement, $signed);
+    public function generateUUIDs($n, $signed);
+    public function generateBlobs($n, $size, $format = 'base64', $signed);
     public function getUsage();
+    public function verifySignature(array $random, $signature);
 }

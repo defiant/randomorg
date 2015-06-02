@@ -43,13 +43,10 @@ class Client implements ClientInterface{
 
     /**
      * @param $url
-     * @param array $params
      */
-    public function __construct($url, $params = [])
+    public function __construct($url)
     {
         $this->url = $url;
-        $this->params = $params;
-
         // init curl
         $this->ch = curl_init($this->url);
     }
@@ -78,8 +75,7 @@ class Client implements ClientInterface{
 
         $request['params'] = $params ? $params : [];
 
-        $request['params'] = array_merge($request['params'], $this->params);
-
+        /*$request['params'] = array_merge($request['params'], $this->params);*/
         return $request;
     }
 
@@ -123,10 +119,10 @@ class Client implements ClientInterface{
 
         $response = json_decode($responseBody, true);
 
-        /*if ($this->debug) {
-            error_log('==> Request: '.PHP_EOL.json_encode($request, JSON_PRETTY_PRINT));
-            error_log('==> Response: '.PHP_EOL.json_encode($response, JSON_PRETTY_PRINT));
-        }*/
+        if (true) {
+            echo('==> Request: '.PHP_EOL.json_encode($request, JSON_PRETTY_PRINT));
+            echo('==> Response: '.PHP_EOL.json_encode($response, JSON_PRETTY_PRINT));
+        }
 
         return $response;
     }
