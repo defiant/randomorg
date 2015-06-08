@@ -2,7 +2,12 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$random = new \RandomOrg\Random();
+/*
+ * NULL Api Key (00000000-0000-0000-0000-000000000000)
+ * will be disabled as the the beta ends.
+ * get your API key at https://api.random.org/api-keys
+ * */
+$random = new \RandomOrg\Random('00000000-0000-0000-0000-000000000000');
 
 // Simple method
 // following functions returns 52 random non-repeating numbers between 1-52

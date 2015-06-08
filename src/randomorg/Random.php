@@ -18,9 +18,10 @@ class Random implements RandomInterface{
     public $url = 'https://api.random.org/json-rpc/1/invoke';
 
     /**
+     * Get your at https://api.random.org/api-keys
      * @var string
      */
-    protected $apiKey = '00000000-0000-0000-0000-000000000000';
+    protected $apiKey = '';
 
     /* Simple Methods */
     const INTEGERS = 'generateIntegers';
@@ -39,9 +40,10 @@ class Random implements RandomInterface{
     const SIGNED_BLOBS = 'generateSignedBlobs';
 
     /**
+     * @param string apiKey
      * @param ClientInterface $client
      */
-    public function __construct(ClientInterface $client = null)
+    public function __construct($apiKey = '', ClientInterface $client = null)
     {
         if(!$client){
             $this->client = new Client($this->url);
@@ -49,6 +51,9 @@ class Random implements RandomInterface{
             $this->client = $client;
         }
 
+        if($apiKey){
+            $this->apiKey = $apiKey;
+        }
     }
 
     /**
@@ -250,5 +255,19 @@ class Random implements RandomInterface{
         }
 
         return $res;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiKey() {
+        return $this->apiKey;
+    }
+
+    /**
+     * @param string $apiKey
+     */
+    public function setApiKey($apiKey) {
+        $this->apiKey = $apiKey;
     }
 }
