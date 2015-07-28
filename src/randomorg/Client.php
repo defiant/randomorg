@@ -28,6 +28,11 @@ class Client implements ClientInterface{
     public $timeout = 10;
 
     /**
+     * @var bool
+     */
+    public $debug = false;
+
+    /**
      * @var array
      */
     protected $headers = [
@@ -39,7 +44,6 @@ class Client implements ClientInterface{
      * @var resource
      */
     protected $ch;
-
 
     /**
      * @param $url
@@ -119,7 +123,7 @@ class Client implements ClientInterface{
 
         $response = json_decode($responseBody, true);
 
-        if (true) {
+        if ($this->debug) {
             echo('==> Request: '.PHP_EOL.json_encode($request, JSON_PRETTY_PRINT));
             echo('==> Response: '.PHP_EOL.json_encode($response, JSON_PRETTY_PRINT));
         }
@@ -158,13 +162,13 @@ class Client implements ClientInterface{
             case -32600:
                 throw new \InvalidArgumentException('Invalid Request: '. $error['message']);
             case -32601:
-                throw new BadFunctionCallException('Procedure not found: '. $error['message']);
+                throw new \BadFunctionCallException('Procedure not found: '. $error['message']);
             case -32602:
-                throw new InvalidArgumentException('Invalid arguments: '. $error['message']);
+                throw new \InvalidArgumentException('Invalid arguments: '. $error['message']);
             case -32603:
                 throw new \RuntimeException('Internal Error: '. $error['message']);
             default:
-                throw new RuntimeException('Invalid request/response: '. $error['message'], $error['code']);
+                throw new \RuntimeException('Invalid request/response: '. $error['message'], $error['code']);
         }
     }
 
