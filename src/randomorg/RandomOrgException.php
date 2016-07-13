@@ -1,9 +1,8 @@
 <?php
 
+namespace RandomOrg;
 
-namespace randomorg;
-
-
-class RandomOrgException extends \Exception{
-
+class RandomOrgException extends \Exception
+{
+    //
 }

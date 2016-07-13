@@ -1,12 +1,13 @@
 <?php
+
 namespace RandomOrg;
 
 /**
  * Class Random
  * @package RandomOrg
  */
-class Random implements RandomInterface{
-
+class Random implements RandomInterface
+{
     /**
      * @var Client
      */
@@ -45,13 +46,13 @@ class Random implements RandomInterface{
      */
     public function __construct($apiKey = '', ClientInterface $client = null)
     {
-        if(!$client){
+        if (!$client) {
             $this->client = new Client($this->url);
-        }else{
+        } else {
             $this->client = $client;
         }
 
-        if($apiKey){
+        if ($apiKey) {
             $this->apiKey = $apiKey;
         }
     }
@@ -92,7 +93,7 @@ class Random implements RandomInterface{
      */
     public function generateDecimalFractions($n, $decimalPlaces = 2, $replacement = true, $signed = false)
     {
-        if($decimalPlaces > 20 || $decimalPlaces < 1){
+        if ($decimalPlaces > 20 || $decimalPlaces < 1) {
             $decimalPlaces = 2;
         }
 
@@ -116,9 +117,9 @@ class Random implements RandomInterface{
      * @return mixed
      * @throws \Exception
      */
-    public function generateGaussians($n, $mean, $standardDeviation, $significantDigits = 2, $signed = false) {
-
-        if($significantDigits > 20 || $significantDigits < 1) {
+    public function generateGaussians($n, $mean, $standardDeviation, $significantDigits = 2, $signed = false)
+    {
+        if ($significantDigits > 20 || $significantDigits < 1) {
             $significantDigits = 2;
         }
 
@@ -145,7 +146,7 @@ class Random implements RandomInterface{
      */
     public function generateStrings($n, $length, $chars = '', $replacement = true, $signed = false)
     {
-        if(!$chars){
+        if (!$chars) {
             $chars = 'abcdefghijklmnopqrstuvwxyz';
         }
 
@@ -174,7 +175,6 @@ class Random implements RandomInterface{
         $method = $signed ? self::SIGNED_UUIDS : self::UUIDS;
 
         return $this->query($method, $params);
-
     }
 
     /**
@@ -189,7 +189,7 @@ class Random implements RandomInterface{
     {
         $acceptedValues = ['base64', 'hex'];
 
-        if(!in_array($format, $acceptedValues)){
+        if (!in_array($format, $acceptedValues)) {
             $format = 'base64';
         }
 
@@ -227,7 +227,7 @@ class Random implements RandomInterface{
           'signature' => $signature
         ];
 
-         $result = $this->query('verifySignature', $params);
+        $result = $this->query('verifySignature', $params);
 
         return (bool) $result['result']['authenticity'];
     }
@@ -243,14 +243,14 @@ class Random implements RandomInterface{
     {
         // All other methods require an API key except verifySignature
         // this method seems to work without it
-        if($method != 'verifySignature') {
+        if ($method != 'verifySignature') {
             $params = array_merge($params, ['apiKey' => $this->apiKey]);
         }
 
         $req = $this->client->prepareRequest($method, $params);
         $res = $this->client->makeRequest($req);
 
-        if(isset($res['error'])){
+        if (isset($res['error'])) {
             throw new RandomOrgException('Random.org exception (' . $res['error']['code'] . '): ' . $res['error']['message']);
         }
 
@@ -260,14 +260,16 @@ class Random implements RandomInterface{
     /**
      * @return string
      */
-    public function getApiKey() {
+    public function getApiKey()
+    {
         return $this->apiKey;
     }
 
     /**
      * @param string $apiKey
      */
-    public function setApiKey($apiKey) {
+    public function setApiKey($apiKey)
+    {
         $this->apiKey = $apiKey;
     }
 }

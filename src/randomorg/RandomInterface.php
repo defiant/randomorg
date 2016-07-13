@@ -1,11 +1,9 @@
 <?php
 
+namespace RandomOrg;
 
-namespace randomorg;
-
-
-interface RandomInterface {
-
+interface RandomInterface
+{
     /*
      * Simple Methods
      * */
