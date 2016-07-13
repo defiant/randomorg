@@ -1,8 +1,6 @@
 <?php
 
-
 namespace RandomOrg;
-
 
 /**
  * Class Client
@@ -10,8 +8,8 @@ namespace RandomOrg;
  *
  * @package RandomOrg
  */
-class Client implements ClientInterface{
-
+class Client implements ClientInterface
+{
     /**
      * @var string
      */
@@ -58,7 +56,8 @@ class Client implements ClientInterface{
     /**
      * destructor
      */
-    public function __destruct(){
+    public function __destruct()
+    {
         curl_close($this->ch);
     }
 
@@ -70,7 +69,8 @@ class Client implements ClientInterface{
      * @param array $params
      * @return array
      */
-    public function prepareRequest($method, array $params = []) {
+    public function prepareRequest($method, array $params = [])
+    {
         $request = [
             'jsonrpc' => '2.0',
             'method'  => $method,
@@ -106,7 +106,7 @@ class Client implements ClientInterface{
             CURLOPT_POSTFIELDS => json_encode($request)
         ]);
 
-        if(!$optionsSet){
+        if (!$optionsSet) {
             throw new \Exception('Cannot set curl options');
         }
 
@@ -141,7 +141,8 @@ class Client implements ClientInterface{
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    public function getResponse(array $response){
+    public function getResponse(array $response)
+    {
         if (isset($response['error']['code'])) {
             $this->handleRpcErrors($response['error']);
         }
@@ -157,8 +158,9 @@ class Client implements ClientInterface{
      * @throws InvalidArgumentException
      * @throws RuntimeException
      */
-    public function handleRpcErrors($error){
-        switch($error['code']){
+    public function handleRpcErrors($error)
+    {
+        switch ($error['code']) {
             case -32600:
                 throw new \InvalidArgumentException('Invalid Request: '. $error['message']);
             case -32601:
@@ -171,5 +173,4 @@ class Client implements ClientInterface{
                 throw new \RuntimeException('Invalid request/response: '. $error['message'], $error['code']);
         }
     }
-
 }
