@@ -42,13 +42,13 @@ $verified = $random->verifySignature($result['result']['random'], $result['resul
 
 1. Register service provider in your `config/app.php` file.
 
-```
+```php
 RandomOrg\RandomServiceProvider::class
 ```
 
 2. Register the RandomOrg facade in the `aliases` key of your `config/app.php`
 
-```
+```php
 'RandomOrg' => RandomOrg\Facades\Random::class,
 ```
 
