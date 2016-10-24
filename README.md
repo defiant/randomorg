@@ -40,19 +40,19 @@ $verified = $random->verifySignature($result['result']['random'], $result['resul
 
 ## Laravel Usage
 
-1. Register service provider in your `config/app.php` file.
+1 Register service provider in your `config/app.php` file.
 
 ```php
 RandomOrg\RandomServiceProvider::class
 ```
 
-2. Register the RandomOrg facade in the `aliases` key of your `config/app.php`
+2 Register the RandomOrg facade in the `aliases` key of your `config/app.php`
 
 ```php
 'RandomOrg' => RandomOrg\Facades\Random::class,
 ```
 
-3. Run a `vendor:publish` artisan command to publish your configuration assets to **`config/randomorg.php`**
+3 Run a `vendor:publish` artisan command to publish your configuration assets to **`config/randomorg.php`**
 
 ```bash
 $ php artisan vendor:publish --provider="RandomOrg\RandomServiceProvider"
