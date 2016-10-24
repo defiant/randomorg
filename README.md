@@ -3,11 +3,21 @@ Native PHP and Laravel Implementation of Random.org's  JSON-RPC API
 
 # Installation with Composer
 
-```php
     composer require defiant/randomorg
+
+or add it in your composer.json require block.
+
+```json
+{
+    "require": {
+        "defiant/randomorg": "1.*"
+    }
+}
 ```
 
-or add it in your composer.json file.
+and
+
+    composer update
 
 ## Native PHP Usage
 
@@ -33,19 +43,19 @@ $verified = $random->verifySignature($result['result']['random'], $result['resul
 1. Register service provider in your `config/app.php` file.
 
 ```
-    RandomOrg\RandomServiceProvider::class
+RandomOrg\RandomServiceProvider::class
 ```
 
 2. Register the RandomOrg facade in the `aliases` key of your `config/app.php`
 
 ```
-    'RandomOrg' => RandomOrg\Facades\Random::class,
+'RandomOrg' => RandomOrg\Facades\Random::class,
 ```
 
 3. Run a `vendor:publish` artisan command to publish your configuration assets to **`config/randomorg.php`**
 
 ```bash
-    $ php artisan vendor:publish --provider="RandomOrg\RandomServiceProvider"
+$ php artisan vendor:publish --provider="RandomOrg\RandomServiceProvider"
 ```
 
 You may set your API key directly in your `config/randomorg.php` file or in your **.env** file like so:
@@ -55,12 +65,12 @@ You may set your API key directly in your `config/randomorg.php` file or in your
 Example code:
 
 ```php
-    use RandomOrg;
+use RandomOrg;
 
-    public function random()
-    {
-        return RandomOrg::generateIntegers(52, 1, 52, false);
-    }
+public function random()
+{
+    return RandomOrg::generateIntegers(52, 1, 52, false);
+}
 ```
 
 ## About API Keys
