@@ -1,6 +1,6 @@
 {
   "name": "defiant/randomorg",
-  "description": "PHP class for Random.org",
+  "description": "PHP class and Laravel implementation for Random.org",
   "keywords": ["random", "random.org"],
   "homepage": "http://github.com/defiant/randomorg",
   "authors": [
@@ -11,7 +11,12 @@
     }
   ],
   "require": {
-    "php": ">=5.4.0"
+    "php": ">=5.4.0",
+    "illuminate/support": "5.*"
+  },
+  "require-dev": {
+      "phpunit/phpunit": "5.*",
+      "mockery/mockery": "dev-master"
   },
   "autoload": {
     "psr-4": {
