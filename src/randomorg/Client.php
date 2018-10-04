@@ -114,11 +114,11 @@ class Client implements ClientInterface
         $responseCode = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 
         if (curl_errno($this->ch)) {
-            throw new RuntimeException(curl_error($this->ch));
+            throw new \RuntimeException(curl_error($this->ch));
         }
 
         if ($responseCode === 401 || $responseCode === 403) {
-            throw new RuntimeException('Access denied');
+            throw new \RuntimeException('Access denied');
         }
 
         $response = json_decode($responseBody, true);
